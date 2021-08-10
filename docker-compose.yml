@@ -2,7 +2,9 @@ version: "3.9"
 volumes:
     prometheus_data: {}
     grafana_data: {}
+
 services:
+
     prometheus:
         image: prom/prometheus:latest
         container_name: prometheus
@@ -37,19 +39,16 @@ services:
         networks: 
             - monitoring
 
-    blackbox-exporter:
-        image: prom/blackbox-exporter:latest
-        container_name: blackbox_exporter
-        volumes: 
-            - ./blackbox/config:/etc/config.yml
-        hostname: blackbox_exporter
-        restart: unless-stopped
+    alertmanager:
+        image: prom/alertmanager
+        container_name: alertmanager
+        volumes:
+            - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+            - ./data/alertmanager:/data
         ports:
-            - "9115:9115"
-        depends_on:
-            - prometheus
-        networks: 
-            - monitoring
+            - 9093:9093
+        networks:
+            - "monitoring"
 
 networks: 
     monitoring:

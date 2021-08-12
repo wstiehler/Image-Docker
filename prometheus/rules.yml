@@ -1,0 +1,10 @@
+groups:
+  - name: default
+    rules:
+      - alert: RequestRate
+        expr:  probe_duration_seconds{instance="blackbox-exporter:9115", job="blackbox", website_instance="https://app.olist.com"}
+        for: 1m
+        labels:
+          severity: high
+        annotations:
+          summary: Application stopped receiving requests
